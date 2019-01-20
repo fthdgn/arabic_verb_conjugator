@@ -1,0 +1,84 @@
+{
+  "name": "arabic_verb_conjugator",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "build:electron": "vue-cli-service build:electron",
+    "postinstall": "electron-builder install-app-deps",
+    "serve:electron": "vue-cli-service serve:electron",
+    "test": "npm run test:unit",
+    "test:unit": "jest"
+  },
+  "gitHooks": {
+    "pre-commit": "npm run test && npm run lint"
+  },
+  "dependencies": {
+    "@types/big.js": "4.0.5",
+    "axios": "0.18.0",
+    "vue": "2.5.22",
+    "vue-axios": "2.1.4",
+    "vue-class-component": "6.3.2",
+    "vue-property-decorator": "7.3.0",
+    "vue-router": "3.0.2"
+  },
+  "devDependencies": {
+    "@types/jest": "23.3.13",
+    "@vue/cli-plugin-babel": "3.3.0",
+    "@vue/cli-plugin-eslint": "3.3.0",
+    "@vue/cli-plugin-typescript": "3.3.0",
+    "@vue/cli-service": "3.3.0",
+    "@vue/eslint-config-standard": "4.0.0",
+    "@vue/eslint-config-typescript": "3.2.0",
+    "@vue/test-utils": "1.0.0-beta.28",
+    "electron": "4.0.1",
+    "jest": "23.6.0",
+    "vue-jest": "3.0.2",
+    "ts-jest": "23.10.5",
+    "typescript": "~3.1.1",
+    "vue-cli-plugin-electron-builder": "1.0.0-rc.10",
+    "vue-template-compiler": "2.5.22"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/recommended",
+      "@vue/standard",
+      "@vue/typescript"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "typescript-eslint-parser"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "json",
+      "vue"
+    ],
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "transform": {
+      ".*\\.(vue)$": "vue-jest",
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testURL": "http://localhost/"
+  },
+  "main": "dist_electron/bundled/background.js"
+}
