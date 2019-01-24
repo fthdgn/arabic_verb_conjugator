@@ -332,25 +332,6 @@ export default class VerbConjugator {
       }
     }
 
-    // Imperative prefix long vowel convertion
-    if (tense === Tense.IMPERATIVE && prefix !== '') {
-      if (
-        // If waw is assimilated, there is no waw convert to long vowel
-        (isFirstRadicalWaw && !assimilateFirstWaw) ||
-        isFirstRadicalYa ||
-        isFirstRadicalHamza
-      ) {
-        // Remove haraka of first radical
-        baseWord = this.removeCharAt(baseWord, 1)
-        // Replace first radical with appropiate long vowel
-        if (this.getImperativeHaraka(harakat.nonPast) === KASRA) {
-          baseWord = this.replaceCharAt(baseWord, 0, '\u064a')
-        } else {
-          baseWord = this.replaceCharAt(baseWord, 0, '\u0648')
-        }
-      }
-    }
-
     returnValues.push(prefix + baseWord + suffix)
 
     // Add shaddah forms for genimated conjugations where suffix is only a sukun
@@ -372,6 +353,30 @@ export default class VerbConjugator {
         returnValues.push(wordRoot + KASRA)
         // Add original version
         returnValues.push(word)
+      }
+    }
+
+    // Imperative prefix long vowel convertion
+    if (tense === Tense.IMPERATIVE && prefix !== '') {
+      if (
+        // If waw is assimilated, there is no waw convert to long vowel
+        (isFirstRadicalWaw && !assimilateFirstWaw) ||
+        isFirstRadicalYa ||
+        isFirstRadicalHamza
+      ) {
+        // Get imperative from. For geminated verbs only the last version has prefix
+        var imperativeForm = returnValues.pop()
+        if (imperativeForm !== undefined) {
+          // Remove haraka of first radical
+          imperativeForm = this.removeCharAt(imperativeForm, 3)
+          // Replace first radical with appropiate long vowel
+          if (this.getImperativeHaraka(harakat.nonPast) === KASRA) {
+            imperativeForm = this.replaceCharAt(imperativeForm, 2, '\u064a')
+          } else {
+            imperativeForm = this.replaceCharAt(imperativeForm, 2, '\u0648')
+          }
+          returnValues.push(imperativeForm)
+        }
       }
     }
 
