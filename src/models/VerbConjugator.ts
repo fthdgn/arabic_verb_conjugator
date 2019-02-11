@@ -34,6 +34,8 @@ export enum Person {
 }
 
 const ALIF_HAMZA_ABOVE = '\u0623'
+const WAW_HAMZA_ABOVE = '\u0624'
+const YA_HAMZA_ABOVE = '\u0626'
 const ALIF_MADDA_ABOVE = '\u0622'
 const PREFIX_AA = '\u0623' + FATHA
 const PREFIX_NAA = '\u0646' + FATHA
@@ -71,11 +73,7 @@ export default class VerbConjugator {
   }
 
   private static getPastBaseForm (
-    radicals: {
-      first: string,
-      second: string,
-      third: string
-    },
+    radicals: Radicals,
     pastHaraka: string
   ): string {
     return (
@@ -88,11 +86,7 @@ export default class VerbConjugator {
   }
 
   private static getNonPastBaseForm (
-    radicals: {
-      first: string,
-      second: string,
-      third: string
-    },
+    radicals: Radicals,
     nonPastHaraka: string
   ): string {
     return (
@@ -242,20 +236,43 @@ export default class VerbConjugator {
     return ''
   }
 
+  private static getHamzatedLetter (haraka: String) {
+    if (haraka === FATHA) {
+      return ALIF_HAMZA_ABOVE
+    } else if (haraka === KASRA) {
+      return YA_HAMZA_ABOVE
+    } else {
+      return WAW_HAMZA_ABOVE
+    }
+  }
+
+  private static replaceHamzaRadicalWithHamzatedLetter (radicals: Radicals, harakat: Harakat, tense: Tense): Radicals {
+    var first = radicals.first
+    var second = radicals.second
+    var third = radicals.third
+
+    if (radicals.first === '\u0621') {
+      first = this.getHamzatedLetter(FATHA)
+    }
+
+    if (radicals.second === '\u0621') {
+      second = this.getHamzatedLetter(tense === Tense.PAST ? harakat.past : harakat.nonPast)
+    }
+
+    if (radicals.third === '\u0621') {
+      third = this.getHamzatedLetter(tense === Tense.PAST ? harakat.past : harakat.nonPast)
+    }
+    return {
+      first: first,
+      second: second,
+      third: third
+    }
+  }
+
   public static conjugate (
-    radicals: {
-      first: string,
-      second: string,
-      third: string
-    },
-    harakat: {
-      past: string,
-      nonPast: string
-    },
-    options: {
-      assimilateFirstWaw?: boolean,
-      shortenImperative?: boolean
-    },
+    radicals: Radicals,
+    harakat: Harakat,
+    options: Options,
     tense: Tense,
     count: Count,
     person: Person,
@@ -265,12 +282,12 @@ export default class VerbConjugator {
     let isFirstRadicalWaw = radicals.first === '\u0648'
     let isFirstRadicalYa = radicals.first === '\u064a'
     let isFirstRadicalHamza = radicals.first === '\u0621'
+    let isSecondRadicalHamza = radicals.second === '\u0621'
+    let isThirdRadicalHamza = radicals.third === '\u0621'
     let assimilateFirstWaw = isFirstRadicalWaw && options.assimilateFirstWaw
+    let addIrregularSecondHamzatedForms = isSecondRadicalHamza && options.irregularSecondHamzatedFirstForm
 
-    if (isFirstRadicalHamza) {
-      // Replace hamze with alif with hamza above
-      radicals.first = ALIF_HAMZA_ABOVE
-    }
+    radicals = this.replaceHamzaRadicalWithHamzatedLetter(radicals, harakat, tense)
 
     var baseWord: string
     var suffix = this.getSuffix(tense, count, person, gender)
@@ -377,6 +394,21 @@ export default class VerbConjugator {
           }
           returnValues.push(imperativeForm)
         }
+      }
+    }
+
+    // Add irregulare forms of second hamzated verbs
+    if (addIrregularSecondHamzatedForms) {
+      if (tense === Tense.IMPERATIVE || tense === Tense.JUSSIVE) {
+        var shortBase = this.replaceCharAt(baseWord, 1, harakat.nonPast)
+        shortBase = this.removeCharAt(shortBase, 2)
+        shortBase = this.removeCharAt(shortBase, 2)
+
+        if (tense === Tense.IMPERATIVE) {
+          prefix = ''
+        }
+
+        returnValues.push(prefix + shortBase + suffix)
       }
     }
 

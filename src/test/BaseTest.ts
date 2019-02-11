@@ -11,18 +11,9 @@ import {
 } from '../models/Utils'
 
 export function runTest (
-  radicals: {
-    first: string,
-    second: string,
-    third: string
-  },
-  harakat: {
-    past: string,
-    nonPast: string
-  },
-  options: {
-    assimilateFirstWaw: boolean
-  },
+  radicals: Radicals,
+  harakat: Harakat,
+  options: Options,
   conjugatedVerbs: {
     past: {
       singular: {
@@ -689,18 +680,9 @@ export function runTest (
 }
 
 function conjugate (
-  radicals: {
-    first: string,
-    second: string,
-    third: string
-  },
-  harakat: {
-    past: string,
-    nonPast: string
-  },
-  options: {
-    assimilateFirstWaw: boolean,
-  },
+  radicals: Radicals,
+  harakat: Harakat,
+  options: Options,
   tense: Tense, count: Count, person: Person, gender: Gender) {
   return normalize(VerbConjugator.conjugate(
     radicals,

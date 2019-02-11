@@ -41,6 +41,14 @@
     </form>
     <br>
 
+    <form v-if="isSecondRadicalHamza()">
+      <input
+        v-model="irregularSecondHamzatedFirstForm"
+        type="checkbox">
+      <label>Irregular middle hamza</label>
+    </form>
+    <br>
+
     <table>
       <tr>
         <th colspan="2"/>
@@ -222,6 +230,7 @@ export default class ArabicVerb extends Vue {
   private thirdRadical: string = 'ظ';
   private wawAsimilated: boolean = true;
   private shortenedImperative: boolean = false;
+  private irregularSecondHamzatedFirstForm: boolean = false;
 
   private vowels = ['a-a', 'a-i', 'a-u', 'i-a', 'i-i', 'u-u'];
 
@@ -231,6 +240,10 @@ export default class ArabicVerb extends Vue {
 
   private isFirstRadicalHamza () {
     return this.firstRadical === '\u0621'
+  }
+
+  private isSecondRadicalHamza () {
+    return this.secondRadical === '\u0621'
   }
 
   private getPastHaraka (): string {
@@ -277,7 +290,8 @@ export default class ArabicVerb extends Vue {
       },
       {
         assimilateFirstWaw: this.wawAsimilated,
-        shortenImperative: this.shortenedImperative
+        shortenImperative: this.shortenedImperative,
+        irregularSecondHamzatedFirstForm: this.irregularSecondHamzatedFirstForm
       },
       tense,
       count,
