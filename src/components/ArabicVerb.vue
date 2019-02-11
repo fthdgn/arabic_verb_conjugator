@@ -224,10 +224,10 @@ export default class ArabicVerb extends Vue {
     'ى'
   ];
 
-  private selectedVowel: string = 'i-a';
-  private firstRadical: string = 'ي';
-  private secondRadical: string = 'ق';
-  private thirdRadical: string = 'ظ';
+  private selectedVowel: string = 'a-a';
+  private firstRadical: string = 'ف';
+  private secondRadical: string = 'ع';
+  private thirdRadical: string = 'ل';
   private wawAsimilated: boolean = true;
   private shortenedImperative: boolean = false;
   private irregularSecondHamzatedFirstForm: boolean = false;
